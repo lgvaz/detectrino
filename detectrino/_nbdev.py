@@ -2,14 +2,24 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {"PILImage.numpy": "00_core.ipynb",
+index = {"patch_classmethod": "00_core.ipynb",
+         "PILImage.numpy": "00_core.ipynb",
          "PILImage.cv2": "00_core.ipynb",
-         "RLE": "02_utils.ipynb",
-         "RLE.decode": "02_utils.ipynb",
-         "RLE.to_bbox": "02_utils.ipynb"}
+         "RLE": "01_data.core.ipynb",
+         "RLE.decode": "01_data.core.ipynb",
+         "RLE.to_bbox": "01_data.core.ipynb",
+         "DataCfg": "01_data.core.ipynb",
+         "Record": "01_data.core.ipynb",
+         "Info": "01_data.core.ipynb",
+         "Annotation": "01_data.core.ipynb",
+         "BBox": "01_data.core.ipynb",
+         "from_xyxy_abs": "01_data.core.ipynb",
+         "from_rle": "01_data.core.ipynb",
+         "Seg": "01_data.core.ipynb",
+         "from_polys": "01_data.core.ipynb"}
 
 modules = ["core.py",
-           "utils.py"]
+           "data/core.py"]
 
 doc_url = "https://lgvaz.github.io/detectrino/"
 
