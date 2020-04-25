@@ -2,9 +2,14 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {}
+index = {"PILImage.numpy": "00_core.ipynb",
+         "PILImage.cv2": "00_core.ipynb",
+         "RLE": "02_utils.ipynb",
+         "RLE.decode": "02_utils.ipynb",
+         "RLE.to_bbox": "02_utils.ipynb"}
 
-modules = []
+modules = ["core.py",
+           "utils.py"]
 
 doc_url = "https://lgvaz.github.io/detectrino/"
 
