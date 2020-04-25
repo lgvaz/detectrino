@@ -14,4 +14,4 @@ def patch_classmethod(f):
 @patch
 def numpy(self:PILImage): return np.array(self)
 @patch
-def cv2(self:PILImage): return self.to_np()[..., ::-1]
+def cv2(self:PILImage): return self.numpy()[..., ::-1]
