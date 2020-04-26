@@ -16,10 +16,12 @@ index = {"patch_classmethod": "00_core.ipynb",
          "from_xyxy_abs": "01_data.core.ipynb",
          "from_rle": "01_data.core.ipynb",
          "Seg": "01_data.core.ipynb",
-         "from_polys": "01_data.core.ipynb"}
+         "from_polys": "01_data.core.ipynb",
+         "ModelCatalog": "05_model.external.ipynb"}
 
 modules = ["core.py",
-           "data/core.py"]
+           "data/core.py",
+           "model/external.py"]
 
 doc_url = "https://lgvaz.github.io/detectrino/"
 
