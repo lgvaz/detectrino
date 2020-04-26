@@ -10,7 +10,8 @@ from ..basics import *
 import pkg_resources
 
 # Cell
-class _ModelCatalog: pass
+class _ModelCatalog:
+    def register(self, name, value): setattr(self, name, value)
 ModelCatalog = _ModelCatalog()
 
 # Cell
@@ -20,5 +21,5 @@ def _populate_model_catalog():
     fns = fns.map(lambda o: str(o.relative_to(cfg_file)))
     for fn in fns:
         name = fn.replace('-','_').replace('/','__').replace('.yaml','')
-        setattr(ModelCatalog, name, fn)
+        ModelCatalog.register(name, fn)
 _populate_model_catalog()
