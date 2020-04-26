@@ -8,7 +8,7 @@ from ..basics import *
 # Cell
 class DsetLoader:
     def __init__(self, source, name, create_dset):
-        self.source,self.name,self.create_set = Path(source),name,create_dset
+        self.source,self.name,self.create_dset = Path(source),name,create_dset
 
     def __call__(self, force):
         path = self.source/f'tmp/dset_{self.name}.pkl'
