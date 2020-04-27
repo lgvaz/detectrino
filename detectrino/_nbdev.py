@@ -6,6 +6,8 @@ index = {"patch_classmethod": "00_core.ipynb",
          "PILImage.numpy": "00_core.ipynb",
          "PILImage.cv2": "00_core.ipynb",
          "storage_path": "00_core.ipynb",
+         "Cfg": "00_core.ipynb",
+         "mergedicts": "00_core.ipynb",
          "DsetLoader": "01_data.core.ipynb",
          "DatasetCatalog.force": "01_data.core.ipynb",
          "DatasetCatalog.get": "01_data.core.ipynb",
@@ -14,7 +16,6 @@ index = {"patch_classmethod": "00_core.ipynb",
          "RLE": "02_data.config.ipynb",
          "RLE.decode": "02_data.config.ipynb",
          "RLE.to_bbox": "02_data.config.ipynb",
-         "DataCfg": "02_data.config.ipynb",
          "Record": "02_data.config.ipynb",
          "Info": "02_data.config.ipynb",
          "Annotation": "02_data.config.ipynb",
@@ -23,12 +24,17 @@ index = {"patch_classmethod": "00_core.ipynb",
          "from_rle": "02_data.config.ipynb",
          "Seg": "02_data.config.ipynb",
          "from_polys": "02_data.config.ipynb",
-         "ModelCatalog": "05_model.external.ipynb"}
+         "ModelCatalog": "05_model.external.ipynb",
+         "ModelCfg": "06_model.config.ipynb",
+         "RCNNCfg": "06_model.config.ipynb",
+         "DetLearner": "08_learner.ipynb"}
 
 modules = ["core.py",
            "data/core.py",
            "data/config.py",
-           "model/external.py"]
+           "model/external.py",
+           "model/config.py",
+           "learner.py"]
 
 doc_url = "https://lgvaz.github.io/detectrino/"
 
