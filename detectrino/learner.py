@@ -8,7 +8,7 @@ from .basics import *
 # Cell
 # Dsets is only train dataset for now
 # TODO: Loading datset twice: Once for getting the len, other by detectron2 internals
-# TODO: How to correctly hand max_iter and lr_schedule?
+# TODO: How to correctly handle max_iter and lr_schedule?
 class DetLearner:
     def __init__(self, dset, mcfg, pretrained=True):
         self.dset = dset
