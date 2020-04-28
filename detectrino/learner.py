@@ -25,16 +25,12 @@ class DetLearner:
         self.reload = False # Used for reloading predictor
         self._predictor = None
 
-    def fit(self, n_epoch, lr, bs=None, resume=False):
+    def fit(self, n_epoch, lr, bs=None):
         self.reload = True
-        cfg = self.cfg
-        cfg.SOLVER.BASE_LR = lr
-        if bs is not None: cfg.SOLVER.IMS_PER_BATCH = bs
-        self.trainer = trainer = DefaultTrainer(cfg)
-        if not resume: trainer.start_iter = 0
-        trainer.max_iter = cfg.SOLVER.MAX_ITER = trainer.start_iter + int(n_epoch*(self.dset_len/bs))
-        trainer.train()
-        cfg.MODEL.WEIGHTS = str(Path(cfg.OUTPUT_DIR)/'model_final.pth')
+        self.update_solver_cfg()
+        self.trainer = DefaultTrainer(self.cfg)
+        self.trainer.train()
+        self.cfg.MODEL.WEIGHTS = str(self.path/'model_final.pth')
 
     def load(self, name):
         self.reload = True
@@ -44,6 +40,18 @@ class DetLearner:
     def _dset_len(self, dset):
 #         return len(self.trainer.data_loader.dataset.dataset._dataset._addr)
         return len(DatasetCatalog.get(dset))
+
+    def update_solver_cfg(self, n_epoch, lr, bs=None):
+        cfgs = self.cfg.SOLVER
+        bs = bs or cfgs.IMS_PER_BATCH
+        max_iter = int(n_epoch*(self.dset_len/bs))
+        scale = (max_iter/cfgs.MAX_ITER)
+        cfgs.BASE_LR = lr
+        cfgs.MAX_ITER = max_iter
+        cfgs.SOLVER.IMS_PER_BATCH = bs
+        cfgs.STEPS = tuple((np.array(cfgs.STEPS)*scale).astype(int))
+        cfgs.WARMUP_ITERS = max(100, int(cfgs.WARMUP_ITERS*scale))
+        cfgs.CHECKPOINT_PERIOD = max(200, int(cfgs.CHECKPOINT_PERIOD*scale))
 
     @property
     def path(self): return Path(self.trainer.cfg.OUTPUT_DIR)
