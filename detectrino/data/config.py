@@ -71,7 +71,7 @@ class Annotation(Cfg):
 
 # Cell
 class BBox(Cfg):
-    def __init__(self, pts, mode): self.pts,self.mode = pts,mode
+    def __init__(self, pts, mode): self.pts,self.mode = list(map(pts, int)),mode
     def to_cfg(self): return {'bbox':self.pts, 'bbox_mode':self.mode}
 
 # Cell
