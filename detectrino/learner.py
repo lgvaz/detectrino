@@ -25,7 +25,7 @@ class DetLearner:
         cfg = self.cfg
         cfg.SOLVER.BASE_LR = lr
         cfg.SOLVER.IMS_PER_BATCH = bs
-        trainer = DefaultTrainer(cfg)
+        self.trainer = trainer = DefaultTrainer(cfg)
         trainer.resume_or_load()
         trainer.max_iter = cfg.SOLVER.MAX_ITER = trainer.start_iter + int(n_epoch*(self.dset_len/bs))
         trainer.train()
