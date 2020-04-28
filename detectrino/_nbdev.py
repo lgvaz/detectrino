@@ -29,7 +29,8 @@ index = {"patch_classmethod": "00_core.ipynb",
          "RCNNCfg": "06_model.config.ipynb",
          "DetLearner": "08_learner.ipynb",
          "predictor": "08_learner.ipynb",
-         "DetLearner.predict": "08_learner.ipynb"}
+         "DetLearner.predict": "08_learner.ipynb",
+         "DetLearner.evaluate": "08_learner.ipynb"}
 
 modules = ["core.py",
            "data/core.py",

@@ -11,20 +11,19 @@ from fastai2.vision.all import *
 # TODO: Loading datset twice: Once for getting the len, other by detectron2 internals
 # TODO: How to correctly handle max_iter and lr_schedule?
 class DetLearner:
-    def __init__(self, dset, mcfg, pretrained=True):
-        self.dset = dset
-        self.dset_len = self._dset_len()
+    def __init__(self, dset, mcfg, pretrained=True, train_name='train', valid_name='valid'):
+        self.dset_train,self.dset_valid = f'{dset}_{train_name}',f'{dset}_{valid_name}'
+        self.dset_len = self._dset_len(self.dset_train)
         cfg = get_cfg()
         cfg.merge_from_file(model_zoo.get_config_file(mcfg.mfile))
         self.cfg = cfg = mergedicts(cfg, mcfg.to_cfg())
-        cfg.DATASETS.TRAIN,cfg.DATASETS.TEST = [dset],[]
+        cfg.DATASETS.TRAIN,cfg.DATASETS.TEST = [self.dset_train],[]
         self.trainer = DefaultTrainer(cfg)
         cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(mcfg.mfile)
         if pretrained: self.trainer.resume_or_load(False)
         os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
         self.reload = False # Used for reloading predictor
         self._predictor = None
-
 
     def fit(self, n_epoch, lr, bs=None, resume=False):
         self.reload = True
@@ -42,9 +41,9 @@ class DetLearner:
         self.cfg.MODEL.WEIGHTS = str(self.path/name)
         self.trainer.resume_or_load(False)
 
-    def _dset_len(self):
+    def _dset_len(self, dset):
 #         return len(self.trainer.data_loader.dataset.dataset._dataset._addr)
-        return len(DatasetCatalog.get(self.dset))
+        return len(DatasetCatalog.get(dset))
 
     @property
     def path(self): return Path(self.trainer.cfg.OUTPUT_DIR)
@@ -69,3 +68,13 @@ def predict(self:DetLearner, fn, thresh=.5):
     v = Visualizer(im.numpy(), predictor.metadata, scale=.5)
     v = v.draw_instance_predictions(pred['instances'].to('cpu'))
     return PILImage.create(v.get_image())
+
+# Cell
+@patch
+def evaluate(self:DetLearner, thresh=.5):
+    cfg = self.cfg.clone()
+    cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = thresh
+    cfg.DATASETS.TEST = [self.dset_valid]
+    evaluator = COCOEvaluator(self.dset_valid, self.cfg, False, output_dir='./output/')
+    val_loader = build_detection_test_loader(cfg, self.dset_valid)
+    inference_on_dataset(self.trainer.model, val_loader, evaluator)
