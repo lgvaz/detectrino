@@ -17,11 +17,11 @@ class DetLearner:
         cfg = get_cfg()
         cfg.merge_from_file(model_zoo.get_config_file(mcfg.mfile))
         self.cfg = cfg = mergedicts(cfg, mcfg.to_cfg())
+        os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
         cfg.DATASETS.TRAIN,cfg.DATASETS.TEST = [self.dset_train],[]
         self.trainer = DefaultTrainer(cfg)
         cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(mcfg.mfile)
         if pretrained: self.trainer.resume_or_load(False)
-        os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
         self.reload = False # Used for reloading predictor
         self._predictor = None
 
