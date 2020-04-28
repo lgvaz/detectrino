@@ -24,7 +24,7 @@ class DetLearner:
     def fit(self, n_epoch, lr, bs=None):
         cfg = self.cfg
         cfg.SOLVER.BASE_LR = lr
-        cfg.SOLVER.IMS_PER_BATCH = bs
+        if bs is not None: cfg.SOLVER.IMS_PER_BATCH = bs
         self.trainer = trainer = DefaultTrainer(cfg)
         trainer.resume_or_load()
         trainer.max_iter = cfg.SOLVER.MAX_ITER = trainer.start_iter + int(n_epoch*(self.dset_len/bs))
