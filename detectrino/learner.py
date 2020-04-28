@@ -21,12 +21,13 @@ class DetLearner:
         os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
         self.cfg = cfg
 
-    def fit(self, n_epoch, lr, bs=None):
+    def fit(self, n_epoch, lr, bs=None, resume=False):
         cfg = self.cfg
         cfg.SOLVER.BASE_LR = lr
         if bs is not None: cfg.SOLVER.IMS_PER_BATCH = bs
         self.trainer = trainer = DefaultTrainer(cfg)
         trainer.resume_or_load()
+        if not resume: trainer.start_iter = 0
         trainer.max_iter = cfg.SOLVER.MAX_ITER = trainer.start_iter + int(n_epoch*(self.dset_len/bs))
         trainer.train()
         cfg.MODEL.WEIGHTS = str(Path(cfg.OUTPUT_DIR)/'model_final.pth')
