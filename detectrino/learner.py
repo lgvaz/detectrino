@@ -45,6 +45,7 @@ class DetLearner:
         cfgs = self.cfg.SOLVER
         bs = bs or cfgs.IMS_PER_BATCH
         max_iter = int(n_epoch*(self.dset_len/bs))
+        print(f'MAX ITER: {max_iter}')
         scale = (max_iter/cfgs.MAX_ITER)
         cfgs.BASE_LR = lr
         cfgs.MAX_ITER = max_iter
