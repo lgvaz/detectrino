@@ -27,7 +27,7 @@ class DetLearner:
 
     def fit(self, n_epoch, lr, bs=None):
         self.reload = True
-        self.update_solver_cfg()
+        self.update_solver_cfg(n_epoch, lr, bs)
         self.trainer = DefaultTrainer(self.cfg)
         self.trainer.train()
         self.cfg.MODEL.WEIGHTS = str(self.path/'model_final.pth')
@@ -48,7 +48,7 @@ class DetLearner:
         scale = (max_iter/cfgs.MAX_ITER)
         cfgs.BASE_LR = lr
         cfgs.MAX_ITER = max_iter
-        cfgs.SOLVER.IMS_PER_BATCH = bs
+        cfgs.IMS_PER_BATCH = bs
         cfgs.STEPS = tuple((np.array(cfgs.STEPS)*scale).astype(int))
         cfgs.WARMUP_ITERS = max(100, int(cfgs.WARMUP_ITERS*scale))
         cfgs.CHECKPOINT_PERIOD = max(200, int(cfgs.CHECKPOINT_PERIOD*scale))
