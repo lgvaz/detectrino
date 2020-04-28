@@ -15,27 +15,30 @@ class DetLearner:
         self.dset_len = self._dset_len()
         cfg = get_cfg()
         cfg.merge_from_file(model_zoo.get_config_file(mcfg.mfile))
-        cfg = mergedicts(cfg, mcfg.to_cfg())
+        self.cfg = cfg = mergedicts(cfg, mcfg.to_cfg())
         cfg.DATASETS.TRAIN,cfg.DATASETS.TEST = [dset],[]
-        if pretrained: cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(mcfg.mfile)
+        self.trainer = DefaultTrainer(cfg)
+        cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(mcfg.mfile)
+        if pretrained: self.trainer.resume_or_load(False)
         os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
-        self.cfg = cfg
 
     def fit(self, n_epoch, lr, bs=None, resume=False):
         cfg = self.cfg
         cfg.SOLVER.BASE_LR = lr
         if bs is not None: cfg.SOLVER.IMS_PER_BATCH = bs
         self.trainer = trainer = DefaultTrainer(cfg)
-        trainer.resume_or_load()
         if not resume: trainer.start_iter = 0
         trainer.max_iter = cfg.SOLVER.MAX_ITER = trainer.start_iter + int(n_epoch*(self.dset_len/bs))
         trainer.train()
         cfg.MODEL.WEIGHTS = str(Path(cfg.OUTPUT_DIR)/'model_final.pth')
 
     def load(self, name):
-        cfg.MODEL.WEIGHTS = str(Path(cfg.OUTPUT_DIR)/name)
-        trainer.resume_or_load()
+        self.cfg.MODEL.WEIGHTS = str(self.path/name)
+        self.trainer.resume_or_load(False)
 
     def _dset_len(self):
 #         return len(self.trainer.data_loader.dataset.dataset._dataset._addr)
         return len(DatasetCatalog.get(self.dset))
+
+    @property
+    def path(self): return Path(self.trainer.cfg.OUTPUT_DIR)
